@@ -30,7 +30,7 @@ export default function Main(props){
     }
     const onDeletePost=(e,num)=>{
 
-        fetch(`http://192.168.0.77:8080/board/delete/${num}`, {
+        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_DEL+`/${num}`, {
             mode:'cors',
             method:'PATCH',
             headers:{
@@ -54,7 +54,7 @@ export default function Main(props){
     }
     
     function getLists() {
-        fetch(paramId === undefined ? 'http://192.168.0.77:8080/board' : 'http://192.168.0.77:8080/board/sort/'+paramId, {
+        fetch(paramId === undefined ? process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD : process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_CATEGORY+'/'+paramId, {
             mode:'cors',
             headers:{
                 'Content-Type' : 'application/json',

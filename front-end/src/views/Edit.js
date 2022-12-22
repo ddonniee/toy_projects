@@ -57,7 +57,7 @@ export default function Edit() {
             category: posts.category
         }
        
-        fetch(method==='POST'?'http://192.168.0.77:8080/board/write':`http://192.168.0.77:8080/board/write/${params.id}`, {
+        fetch(method==='POST'? process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_ADD:process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_ADD+`/${params.id}`, {
             method: method,
             mode:'cors',
             headers:{
@@ -77,7 +77,7 @@ export default function Edit() {
     const [contentHeight, setContentHeight] = useState('50px')
     useEffect(()=>{
         if(posts.contents.length > 70) {
-
+            setContentHeight('100px')
         }
     },[posts.contents])
     /**
@@ -95,7 +95,7 @@ export default function Edit() {
      */
     useLayoutEffect(()=>{
         if(method==='PATCH') {
-            fetch(`http://192.168.0.77:8080/board/write/${params.id}`, {
+            fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_ADD+`/${params.id}`, {
                 mode:'cors',
                 headers:{
                     'Content-Type' : 'application/json',

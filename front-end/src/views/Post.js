@@ -5,13 +5,18 @@ import styled from "styled-components";
 
 // components
 import Header from "../components/Header";
+// env
+
 export default function Post(){
     let location = useLocation()
     const post_num = location.state.post_num;
     const [posts, setPosts] = useState({})
 
+    console.log(process.env,'process.env.REACT_APP_ACCESS_WRITE')
+
     useLayoutEffect(()=>{
-        fetch(`http://192.168.0.77:8080/board/write/${post_num}`, {
+        // fetch(`http://192.168.0.77:8080/board/write/${post_num}`, {
+            fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_ADD+`/${post_num}`, {
                 mode:'cors',
                 headers:{
                     'Content-Type' : 'application/json',
@@ -38,7 +43,7 @@ export default function Post(){
         if(posts.title==='' || null) {
             return false
         }
-        fetch(`http://192.168.0.77:8080/board/hits/${post_num}`, {
+        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_HITS+`/${post_num}`, {
                 mode:'cors',
                 method:'PATCH',
                 headers:{
