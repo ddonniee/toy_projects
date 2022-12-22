@@ -1,0 +1,6 @@
+# dotenv
+.env
+# package-lock.json
+package-lock.json
+# packages
+node_modules
