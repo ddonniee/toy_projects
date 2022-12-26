@@ -107,7 +107,8 @@ export default function Main(props){
         },[paramId])
 
         useEffect(()=>{
-            if(token!==null) {
+            // if(token!==null) {
+                if(token==null) {
                 setBtnDetail({
                     ...btnDetail,
                     title:'글 작성하기',

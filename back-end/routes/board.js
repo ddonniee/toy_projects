@@ -74,9 +74,8 @@ router.get('/', function(req,res,next) {
 
   router.post('/write', function(req,res,next) {
     try{
-      let post_num = new Date().getDate();
-      post_num = (req.body.num).tostring + post_num;
-      console.log('post_num:::::::::::::::::::::::',post_num)
+      let post_num = new Date().getTime();
+      post_num = JSON.stringify(req.body.num) + JSON.stringify(post_num) ;
       let sql = 'insert into lists (num,user_num,writer,title,contents,category) values (?,?,?,?,?,?)';
       let params = [post_num,req.body.num,req.body.writer, req.body.title, req.body.contents, req.body.category]
       maria.query(sql, params, function(err,rows,fields) {
