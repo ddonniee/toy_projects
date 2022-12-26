@@ -14,7 +14,7 @@ module.exports = {
             expiresIn: '1h'
         })
     },
-    verify: (token) =>{
+    verify: (token) =>{ // access token 검증
         let decoded = null;
         try {
             decoded = jwt.verify(token, secret);
@@ -30,7 +30,7 @@ module.exports = {
             };
         }
     },
-    refresh: ()=>{
+    refresh: ()=>{ // refresh token 발급
         return jwt.sign({}, secret, {
             algorithm: 'HS256',
             expiresIn: '14d'
@@ -44,7 +44,7 @@ module.exports = {
         const getAsync = promisfy(redisClient.get).bind(redisClient);
 
         try {
-            const data = await getAsync(userId);
+            const data = await getAsync(userId); // refresh token 가져오기
             if(token===date) {
                 try{
                     jwt.verify(token, secret);

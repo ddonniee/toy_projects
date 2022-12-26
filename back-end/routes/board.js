@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 const maria = require('../database/connect/maria')
-
 router.get('/', function(req,res,next) {
   console.log('전체보기')
   try {
@@ -30,7 +29,6 @@ router.get('/', function(req,res,next) {
    */
   router.get('/sort/:category', function(req,res,next) {
 
-    console.log(req.params.category,'항목별보기')
     try{
       let sql = 'select * from lists where category=? and isShown=1';
       let params = req.params.category;
@@ -76,8 +74,11 @@ router.get('/', function(req,res,next) {
 
   router.post('/write', function(req,res,next) {
     try{
-      let sql = 'insert into lists (writer,title,contents,category) values (?,?,?,?)';
-      let params = [req.body.writer, req.body.title, req.body.contents, req.body.category]
+      let post_num = new Date().getDate();
+      post_num = (req.body.num).tostring + post_num;
+      console.log('post_num:::::::::::::::::::::::',post_num)
+      let sql = 'insert into lists (num,user_num,writer,title,contents,category) values (?,?,?,?,?,?)';
+      let params = [post_num,req.body.num,req.body.writer, req.body.title, req.body.contents, req.body.category]
       maria.query(sql, params, function(err,rows,fields) {
         if(!err){
           res.send({

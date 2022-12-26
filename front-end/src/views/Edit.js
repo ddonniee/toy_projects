@@ -11,6 +11,7 @@ export default function Edit() {
     const [method, setMethod] = useState('POST') // params.id 존재시 카드 수정, 미존재시 카드 생성으로 나누는 기준
     const [posts,setPosts] = useState({
         num:'',
+        writer_num:0,
         title:'',
         writer:'donnie',
         contents:'',
@@ -51,6 +52,8 @@ export default function Edit() {
         }
 
         let posting = {
+            // num:posts.writer_num,
+            num:1,
             writer: posts.writer,
             title : posts.title,
             contents: posts.contents,

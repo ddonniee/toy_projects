@@ -52,9 +52,35 @@ export default function Main(props){
             console.log(err)
         );
     }
-    
+
+    function checkAuth() {
+
+        let data = {
+            userId: 'donnie',
+            userPw:'donnie123'
+        }
+        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_AUTH, {
+            method:'POST',
+            mode:'cors',
+            headers:{
+                'Content-Type' : 'application/json',
+                'Accept' : 'application/json',
+                'Access-Control-Allow-Origin':'*',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res=>{
+            return res.json();
+        })
+        .then(data=>{
+            console.log(data)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
     function getLists() {
-        fetch(paramId === undefined ? process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD : process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_CATEGORY+'/'+paramId, {
+        fetch(paramId === undefined ? process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD : process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_CATEGORY+'/'+paramId, {
             mode:'cors',
             headers:{
                 'Content-Type' : 'application/json',
@@ -83,10 +109,10 @@ export default function Main(props){
                 setParamId(location.state.category)
             }
             getLists()
+            checkAuth()
         },[])
 
         useEffect(()=>{
-            console.log(paramId,'===============')
             getLists()
         },[paramId])
     

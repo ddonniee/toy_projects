@@ -10,7 +10,7 @@ export default function Header(props) {
     // const {user} = props;
     
     const navigate = useNavigate();
-    const {isShown, onReadUrl} = props;
+    const {isShown,title,url, onReadUrl} = props;
 
     const onCategorize=(e)=>{
         let url = e.target.id;
@@ -31,7 +31,7 @@ export default function Header(props) {
         <div className="headerWrapper">
             <div className="info">
                 <p>게시판 사이트</p>
-                {isShown ? <Button title='글 작성하기' link='/write' />:null}
+                {isShown ? <Button title={title} link={url} />:null}
             </div>
             <div className="nav">
                 <ul>
