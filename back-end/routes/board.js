@@ -154,7 +154,7 @@ router.get('/', function(req,res,next) {
       })
     }
   })
-  router.patch('/delete/:num', function(req,res,next) {
+  router.patch('/delete/:num',function(req,res,next) {
     try{
       let sql = 'update lists SET isShown=0 where num=? ';
       let params = [req.params.num]

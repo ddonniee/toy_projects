@@ -40,10 +40,11 @@ export default function Post(){
     },[])
     // 조회수 카운팅 API
     useEffect(()=>{
+        console.log('hissssssssssssssssssss')
         if(posts.title==='' || null) {
             return false
         }
-        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_HITS+`/${post_num}`, {
+        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_HITS+`/${post_num}`, {
                 mode:'cors',
                 method:'PATCH',
                 headers:{

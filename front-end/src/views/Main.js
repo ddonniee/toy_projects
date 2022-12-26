@@ -1,4 +1,4 @@
-import React,{useState, useEffect, useLayoutEffect} from "react";
+import React,{useState, useEffect, useLayoutEffect, useContext} from "react";
 import { useNavigate ,useParams,useLocation } from "react-router-dom";
 import styled from "styled-components";
 import moment from "moment/moment";
@@ -8,15 +8,24 @@ import Header from "../components/Header";
 // svgs
 import Edit from "../public/images/edit.png"
 import Delete from "../public/images/delete.png"
+import New from '../public/images/new.png'
+import { AppContext } from "../App";
 
 export default function Main(props){
 
+    
     let params = useParams();
     let location = useLocation();
     let navigate = useNavigate();
+    const token = useContext(AppContext);
 
+    const [isLogin, setIsLogin] = useState(false)
     const [posts, setPosts] = useState([])
     const [paramId, setParamId] = useState()
+    const [btnDetail, setBtnDetail] = useState({
+        title:'',
+        url:''
+    })
     
     console.log('location',location)
 
@@ -37,6 +46,7 @@ export default function Main(props){
                 'Content-Type' : 'application/json',
                 'Accept' : 'application/json',
                 'Access-Control-Allow-Origin':'*',
+                'Authorization':'Bearer ' + token,
             }
         })
         .then(res=> {
@@ -53,32 +63,12 @@ export default function Main(props){
         );
     }
 
-    function checkAuth() {
-
-        let data = {
-            userId: 'donnie',
-            userPw:'donnie123'
+    function checkLogin() {
+        if(token!==null) {
+            setIsLogin(true)
         }
-        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_AUTH, {
-            method:'POST',
-            mode:'cors',
-            headers:{
-                'Content-Type' : 'application/json',
-                'Accept' : 'application/json',
-                'Access-Control-Allow-Origin':'*',
-            },
-            body: JSON.stringify(data)
-        })
-        .then(res=>{
-            return res.json();
-        })
-        .then(data=>{
-            console.log(data)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
     }
+
     function getLists() {
         fetch(paramId === undefined ? process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD : process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_CATEGORY+'/'+paramId, {
             mode:'cors',
@@ -109,19 +99,35 @@ export default function Main(props){
                 setParamId(location.state.category)
             }
             getLists()
-            checkAuth()
+            checkLogin()
         },[])
 
         useEffect(()=>{
             getLists()
         },[paramId])
-    
+
+        useEffect(()=>{
+            if(token!==null) {
+                setBtnDetail({
+                    ...btnDetail,
+                    title:'글 작성하기',
+                    url:'/write'
+                })
+            }else{
+                setBtnDetail({
+                    ...btnDetail,
+                    title:'로그인하기',
+                    url:'/login'
+                })
+            }
+        },[token])
+
     return(
         <MainStyle>
         <div className="mainWrapper">
             {/* <div className="mainTop">게시판</div> */}
             <div className="contents">
-                <Header isShown={true} title="글 작성하기" url="/write" onReadUrl={setParamId}/>
+                <Header isShown={true} title={btnDetail.title} url={btnDetail.url} onReadUrl={setParamId}/>
                 <div className="categoryTitle">{paramId === undefined ? '전체보기': paramId}</div>
                  <table className="lists">
                     <tr >

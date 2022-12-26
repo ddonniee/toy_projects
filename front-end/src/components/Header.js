@@ -7,7 +7,7 @@ import Button from "./Button";
 
 export default function Header(props) {
 
-    // const {user} = props;
+    console.log(props)
     
     const navigate = useNavigate();
     const {isShown,title,url, onReadUrl} = props;
@@ -31,7 +31,7 @@ export default function Header(props) {
         <div className="headerWrapper">
             <div className="info">
                 <p>게시판 사이트</p>
-                {isShown ? <Button title={title} link={url} />:null}
+                {isShown ? <Button title={title} url={url} />:null}
             </div>
             <div className="nav">
                 <ul>

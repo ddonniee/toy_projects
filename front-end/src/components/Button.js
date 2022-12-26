@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 
 import styled from "styled-components";
 export default function Button(props) {
-    const {title, link} = props;
+    const {title, url} = props;
+    console.log(props)
     return(
         <ButtonStyle>
             <div className="buttonWrapper">
-                <Link to={link}><label htmlFor="createBtn"><input type="button" className='createBtn' name='createBtn'/>{title}</label></Link>
+                <Link to={url}><label htmlFor="createBtn"><input type="button" className='createBtn' name='createBtn'/>{title}</label></Link>
             </div>
         </ButtonStyle>
     )

@@ -3,33 +3,19 @@ var express = require('express');
 const jwt = require('jsonwebtoken')
 const auth = require('../config/authMiddleware')
 
+const jmt = require('../utils/jwt-util')
+const redis = require('../utils/redis')
+
 var router = express.Router();
 
-const maria = require('../database/connect/maria')
+const maria = require('../database/connect/maria');
+const redisClient = require('../utils/redis');
 
-const Crypto = require('crypto-js');
-const crypt = require('crypto');
 /* GET users listing. */
 router.get('/', auth, function(req, res, next) {
   res.send('respond with a resource');
 });
 
-/**
- * 암호화 키 생성
- */
-function encrypt(data,key) {
-  return Crypto.AES.encrypt(data,key).toString();
-}
-function javaDecrypt(data,key) {
-  var decryptedData=Crypto.AES.decrypt(data,key, {
-    mode: Crypto.mode.ECB,
-    padding: Crypto.pd.Pkcs7
-  });
-  return decryptedData.toString(Crypto.enc.utf8)
-}
-function nodeDecrypt(data,key) {
-  return Crypto.ES.decrypt(data, key).toString(Crypto.enc.utf8);
-}
 /**
  * jwt token 요청 API
  */
@@ -45,17 +31,37 @@ router.post('/', async(req,res)=>{
       if(err) {
         console.log(err)
       }else if(results.length !== 0){
+
+        // const accessToken = jmt.sign(params)
+        // const refreshToken = jmt.refresh();
+        
+        // redisClient.set(userId, refreshToken);
+
+        // res.status(200).send({
+        //   ok: true,
+        //   data: {
+        //     accessToken,
+        //     refreshToken
+        //   }
+        // })
         const token = jwt.sign({
           userId,
           userPw,
         }, process.env.JWT_KEY, {
-          expiresIn: '7d',
+          expiresIn: '1d',
           issuer:'b_admin'
         });
+        // const refreshToken = jmt.refresh(token)
+
         return res.json({
           code: 200,
           message: 'token issued',
-          token
+          // data:{
+          //   token,
+          //   refreshToken
+          // }
+          token,
+          // refreshToken
         })
       }else {
         return res.json({
