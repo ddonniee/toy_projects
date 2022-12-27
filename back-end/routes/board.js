@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const auth = require('../config/authMiddleware')
+
 const maria = require('../database/connect/maria')
 router.get('/', function(req,res,next) {
   console.log('전체보기')
@@ -72,7 +74,7 @@ router.get('/', function(req,res,next) {
     })
   })
 
-  router.post('/write', function(req,res,next) {
+  router.post('/write',auth, function(req,res,next) {
     try{
       let post_num = new Date().getTime();
       post_num = JSON.stringify(req.body.num) + JSON.stringify(post_num) ;
@@ -127,7 +129,7 @@ router.get('/', function(req,res,next) {
       })
     }
   })
-  router.patch('/write/:num', function(req,res,next) {
+  router.patch('/write/:num',auth, function(req,res,next) {
     try{
       let sql = 'update lists SET title=?, contents=?, category=? where num=? ';
       let params = [req.body.title,req.body.contents, req.body.category,req.params.num]
@@ -153,7 +155,7 @@ router.get('/', function(req,res,next) {
       })
     }
   })
-  router.patch('/delete/:num',function(req,res,next) {
+  router.patch('/delete/:num',auth,function(req,res,next) {
     try{
       let sql = 'update lists SET isShown=0 where num=? ';
       let params = [req.params.num]

@@ -64,8 +64,21 @@ export default function Main(props){
     }
 
     function checkLogin() {
+        console.log(token)
         if(token!==null) {
+            // if(token==null) {
+            setBtnDetail({
+                ...btnDetail,
+                title:'글 작성하기',
+                url:'/write'
+            })
             setIsLogin(true)
+        }else{
+            setBtnDetail({
+                ...btnDetail,
+                title:'로그인하기',
+                url:'/login'
+            })
         }
     }
 
@@ -91,6 +104,7 @@ export default function Main(props){
             console.log(err)
         );
     }
+
     // fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD, {
          useLayoutEffect(()=>{
             if(location.pathname==='/') {
@@ -105,23 +119,6 @@ export default function Main(props){
         useEffect(()=>{
             getLists()
         },[paramId])
-
-        useEffect(()=>{
-            // if(token!==null) {
-                if(token==null) {
-                setBtnDetail({
-                    ...btnDetail,
-                    title:'글 작성하기',
-                    url:'/write'
-                })
-            }else{
-                setBtnDetail({
-                    ...btnDetail,
-                    title:'로그인하기',
-                    url:'/login'
-                })
-            }
-        },[token])
 
     return(
         <MainStyle>

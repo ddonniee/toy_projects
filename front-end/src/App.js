@@ -37,8 +37,8 @@ function App() {
         return res.json();
     })
     .then(data=>{
-      console.log(data)
-      setToken(data)
+      console.log('data',data)
+      setToken(data.token.accessToken)
     })
     .catch(err=>{
         console.log(err)
@@ -69,7 +69,7 @@ useEffect(()=>{
   console.log(login)
 },[login])
 
-console.log('token=================',token)
+console.log(token,'tokentokentokentoken')
   return (
     <AppContext.Provider value={token}>
         <BrowserRouter>

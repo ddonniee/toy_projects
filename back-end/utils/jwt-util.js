@@ -1,17 +1,17 @@
 const {promisfy} = require('util')
 const jwt = require('jsonwebtoken')
 const redisClient = require('./redis')
-const secret = process.env.SECRET;
+const secret = process.env.JWT_kEY;
 
 module.exports = {
     sign:(user)=>{  // access token 발급
         const payload ={ // access token에 들어갈 payload
-            id: user_id,
-            role: user_role
+            id: userId,
+            pw: userPw,
         };
         return jwt.sign(payload, secret, {
             algorithm: 'HS256',
-            expiresIn: '1h'
+            expiresIn: '1h',
         })
     },
     verify: (token) =>{ // access token 검증
@@ -21,7 +21,7 @@ module.exports = {
             return {
                 ok: true,
                 id: decoded.id,
-                role: decoded.role,
+                pw: decoded.pw,
             };
         } catch (err) {
             return {

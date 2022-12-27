@@ -15,6 +15,7 @@
 | /borad/delete/num | PATCH | 특정 게시물 삭제 | url:posting num |
 
 - 📌 users
+
 | URL | METHOD | 기능 | params |
 | --- | --- | --- | --- |
 | /users | POST | token 발급 | body: {user_id, user_pw} |
@@ -36,6 +37,7 @@
 | hits | int | not null | 0 | 목록에서 특정게시물 클릭시 바로 카운팅 |
 
 - 📌 users
+
 | 이름 | 데이터 유형 | null | 기본값 | 설명 |s
 | --- | --- | --- | --- | --- |
 | user_num | int | not null | auto_increment | 유저 생성시 자동 입력 |

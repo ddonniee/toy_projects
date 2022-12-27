@@ -17,7 +17,7 @@ export default function Edit() {
         contents:'',
         insert_date:'',
         isShown:'',
-        category:'사내 프로젝트',
+        category:'사내프로젝트',
         hits: 0,
     })
     

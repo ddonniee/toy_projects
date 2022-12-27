@@ -1,9 +1,12 @@
+require('dotenv').config();
+
 var express = require('express');
 
+const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const auth = require('../config/authMiddleware')
 
-const jmt = require('../utils/jwt-util')
+const jwtUtil = require('../utils/jwt-util')
 const redis = require('../utils/redis')
 
 var router = express.Router();
@@ -15,7 +18,6 @@ const redisClient = require('../utils/redis');
 router.get('/', auth, function(req, res, next) {
   res.send('respond with a resource');
 });
-
 /**
  * jwt token 요청 API
  */
@@ -32,36 +34,34 @@ router.post('/', async(req,res)=>{
         console.log(err)
       }else if(results.length !== 0){
 
-        // const accessToken = jmt.sign(params)
-        // const refreshToken = jmt.refresh();
-        
-        // redisClient.set(userId, refreshToken);
+        let info = {type: false, message: ''};
 
-        // res.status(200).send({
-        //   ok: true,
-        //   data: {
-        //     accessToken,
-        //     refreshToken
-        //   }
-        // })
-        const token = jwt.sign({
+        crypto.createHash('sha512').update(userPw).digest('base64');
+        let hex_password = crypto.createHash('sha512').update(userPw).digest('hex');
+
+        const accessToken = jwt.sign({
           userId,
           userPw,
         }, process.env.JWT_KEY, {
           expiresIn: '1d',
           issuer:'b_admin'
         });
-        // const refreshToken = jmt.refresh(token)
+        const refreshToken = jwtUtil.refresh()
+
+        redisClient.set(userId,refreshToken)
+
+        info.message = 'success';
+        res.setHeader('Content-Type','application/json; charset=utf-8');
+        res.setHeader('Authorization', 'Bearer ' + accessToken);
+        res.setHeader('Refresh', 'Bearer ' + refreshToken);
 
         return res.json({
           code: 200,
           message: 'token issued',
-          // data:{
-          //   token,
-          //   refreshToken
-          // }
-          token,
-          // refreshToken
+          token:{
+            accessToken,
+            refreshToken
+          }
         })
       }else {
         return res.json({
@@ -70,38 +70,10 @@ router.post('/', async(req,res)=>{
         })
       }
     })
-
-
-    // maria.query(sql, params, (err,results,fields)=>{
-    //   if(err){
-    //     res.json({
-    //       code: 400,
-    //       msg: 'FAIL',
-    //     })
-    //   }else if(req.body.id==null){
-    //     res.json({
-    //       code: 400,
-    //       msg: 'null id'
-    //     })
-    //   }else {
-    //     const token = jwt.sign({
-    //       userId,
-    //       userPw,
-    //     }, process.env.JWT_KEY, {
-    //       expiresIn: '7d',
-    //       issuer:'b_admin'
-    //     });
-    //     return res.json({
-    //       code: 200,
-    //       message: 'token issued',
-    //       token
-    //     })
-    //   }
-    // })
   }catch(err){
     res.send({
       code: 400,
-      msg: err
+      msg: 'ddd'
     })
   }
 })
