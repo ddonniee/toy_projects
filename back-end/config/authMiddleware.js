@@ -27,7 +27,7 @@ const authMiddleware = async (req,res,next) => {
         }catch (err){
             res.status(401).json({
                 success:false,
-                errorMessage: 'Authorization fail'
+                errorMessage: result.message
             })
         }
     }

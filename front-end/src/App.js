@@ -16,9 +16,9 @@ function App() {
     id:null,
     password:null,
   })
+  const [isLogin, setIsLogin] = useState(false)
   const [token, setToken] = useState(null)
   async function checkAuth() {
-
     let userInfo = {
         userId: login.id,
         userPw:login.password
@@ -38,7 +38,7 @@ function App() {
     })
     .then(data=>{
       console.log('data',data)
-      setToken(data.token.accessToken)
+      setToken(data.token)
     })
     .catch(err=>{
         console.log(err)
@@ -66,8 +66,11 @@ const onSubmitInfo=(e)=>{
   console.log('야호')
 }
 useEffect(()=>{
-  console.log(login)
-},[login])
+  if(token!==null){
+    console.log('=====================!!')
+    setIsLogin(true)
+  }
+},[token])
 
 console.log(token,'tokentokentokentoken')
   return (
@@ -76,7 +79,12 @@ console.log(token,'tokentokentokentoken')
         <div className="App">
           <div className='content'>
             <Routes>
+            {token == undefined || token == null
+              ?
+              <Route excact path="/" element={<Login onChange={onSaveInfo} onClick={checkAuth}/>}></Route>
+              :
               <Route excact path="/" element={<Main/>}></Route>
+              }
               <Route excact path="/login" element={<Login onChange={onSaveInfo} onClick={checkAuth}/>}></Route>
               <Route path="/category/:id" element={<Main/>}></Route>
               <Route path="/read/:id" element={<Post/>}></Route>

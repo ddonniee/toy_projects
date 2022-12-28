@@ -1,8 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const auth = require('../config/authMiddleware')
-
-const maria = require('../database/connect/maria')
+const crypto = require('crypto')
+const jwt = require('jsonwebtoken')
+const jwtUtil = require('../utils/jwt-util')
+const redis = require('../utils/redis')
+const redisClient = require('../utils/redis');
+const maria = require('../database/connect/maria');
+const passport = require('../config/passport');
 router.get('/', function(req,res,next) {
   console.log('전체보기')
   try {
@@ -25,6 +30,82 @@ router.get('/', function(req,res,next) {
       msg:'FAIL',
     })
   }
+  })
+  /**
+   * 토큰발급
+   */
+   router.post('/', (req,res,next)=>{
+    console.log('jwt jmt,',req.body)
+    passport.authenticate('signin', {
+      successRedirect: '/board',
+      failureRedirect:'/login',
+      failureFlash:true
+    })
+    // try{
+    //   const key = process.env.JWT_kEY;
+    //   const {userId, userPw} = req.body;
+    //   const sql = 'select * from users where user_id = ? AND user_pw = ?';
+    //   const params = [userId, userPw]
+    //   maria.query(sql, params, function(err,results, fields){
+    //     if(err) {
+    //       console.log(err)
+    //     }else if(results.length !== 0){
+      //     passport.authenticate('signin', (err, user, info)=>{
+      //       if(!user) {
+      //         return res.status(400).json({message:results})
+      //       }
+      //       const token = jwt.sign(
+      //         { 
+      //           usernameField:userId,
+      //           paaswordField:userPw 
+      //         },
+      //         process.env.JWT_KEY
+      //       );
+      //       res.json({token});
+      //     })(req,res,next)
+            
+    //       let info = {type: false, message: ''};
+  
+    //       crypto.createHash('sha512').update(userPw).digest('base64');
+    //       let hex_password = crypto.createHash('sha512').update(userPw).digest('hex');
+  
+    //       const accessToken = jwt.sign({
+    //         userId,
+    //         userPw,
+    //       }, process.env.JWT_KEY, {
+    //         expiresIn: '1d',
+    //         issuer:'b_admin'
+    //       });
+    //       const refreshToken = jwtUtil.refresh()
+  
+    //       redisClient.set(userId,refreshToken)
+  
+    //       info.message = 'success';
+    //       res.setHeader('Content-Type','application/json; charset=utf-8');
+    //       res.setHeader('Authorization', 'Bearer ' + accessToken);
+    //       res.setHeader('Refresh', 'Bearer ' + refreshToken);
+  
+    //       return res.json({
+    //         code: 200,
+    //         message: 'token issued',
+    //         token:{
+    //           accessToken,
+    //           refreshToken
+    //         }
+    //       })
+    //     }else {
+    //       return res.json({
+    //         code: 400,
+    //         message: 'not joined'
+    //       })
+    //     }
+    //   })
+    // }catch(err){
+    //   res.send({
+    //     code: 400,
+    //     msg: err
+    //   })
+    // }
   })
   /**
    * 카테고리별 극 목록보기
