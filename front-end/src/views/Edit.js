@@ -1,12 +1,14 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState,useContext } from "react";
 import { Link,useParams } from "react-router-dom";
 
 // components
 import styled from "styled-components";
 import Header from "../components/Header";
+import { AppContext } from "../App";
 
 export default function Edit() {
 
+    const token = useContext(AppContext);
     const [auth,setAuth] = useState(true)
     const [method, setMethod] = useState('POST') // params.id 존재시 카드 수정, 미존재시 카드 생성으로 나누는 기준
     const [posts,setPosts] = useState({
@@ -66,6 +68,7 @@ export default function Edit() {
             headers:{
                 'Content-type':'application/json',
                 'Access-Control-Allow-Origin': '*',
+                // 'Authorization':'Bearer ' + token,
             },
             body: JSON.stringify(posting),
         })

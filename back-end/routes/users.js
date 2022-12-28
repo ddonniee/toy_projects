@@ -25,7 +25,6 @@ router.get('/', auth, function(req, res, next) {
  */
 // router.post('/', async(req,res)=>{
 router.post('/', (req,res,next)=>{
-  console.log('jwt jmt,',req.body)
   try{
     const key = process.env.JWT_kEY;
     const {userId, userPw} = req.body;

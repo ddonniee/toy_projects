@@ -33,8 +33,6 @@ router.get('/', auth, function (req, res, next) {
 // router.post('/', async(req,res)=>{
 
 router.post('/', function (req, res, next) {
-  console.log('jwt jmt,', req.body);
-
   try {
     var key = process.env.JWT_kEY;
     var _req$body = req.body,

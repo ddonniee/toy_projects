@@ -14,7 +14,7 @@ passport.serializeUser(function(user, done) {
       console.log("deserializeUser id ", id)
       var userinfo;
       var sql = 'SELECT * FROM users WHERE user_id=?';
-      mysql.query(sql , [id], function (err, result) {
+      maria.query(sql , [id], function (err, result) {
         if(err) console.log('mysql 에러');     
        
         console.log("deserializeUser mysql result : " , result);
@@ -30,6 +30,7 @@ const JWTConfig = {
 }
 const JWTVerify  = async (jwtPayload, done) =>{
     try{
+        console.log(jwtPayload.id)
         if(user) {
             done(null, 'user');
             return;

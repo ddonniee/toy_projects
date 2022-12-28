@@ -20,7 +20,7 @@ passport.deserializeUser(function (id, done) {
   console.log("deserializeUser id ", id);
   var userinfo;
   var sql = 'SELECT * FROM users WHERE user_id=?';
-  mysql.query(sql, [id], function (err, result) {
+  maria.query(sql, [id], function (err, result) {
     if (err) console.log('mysql 에러');
     console.log("deserializeUser mysql result : ", result);
     var json = JSON.stringify(result[0]);
@@ -39,34 +39,35 @@ var JWTVerify = function JWTVerify(jwtPayload, done) {
       switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
+          console.log(jwtPayload.id);
 
           if (!user) {
-            _context.next = 4;
+            _context.next = 5;
             break;
           }
 
           done(null, 'user');
           return _context.abrupt("return");
 
-        case 4:
+        case 5:
           done(null, false, {
             message: 'inaccurate token'
           });
-          _context.next = 11;
+          _context.next = 12;
           break;
 
-        case 7:
-          _context.prev = 7;
+        case 8:
+          _context.prev = 8;
           _context.t0 = _context["catch"](0);
           console.log(_context.t0);
           done(_context.t0);
 
-        case 11:
+        case 12:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 7]]);
+  }, null, null, [[0, 8]]);
 };
 
 passport.use('jwt', new JWTStrategy(JWTConfig, JWTVerify));

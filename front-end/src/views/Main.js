@@ -95,9 +95,6 @@ export default function Main(props){
             return res.json();
         })
         .then(data=>{
-            data.sort(function(a,b){
-                return b.num-a.num;
-            })
             setPosts(data)
         })
         .catch((err)=> 
@@ -160,8 +157,11 @@ const MainStyle = styled.div`
 table {
     width: 100vw;     border-top: 1px solid;
 }
+.contents {
+    height: 100vh;
+}
 .categoryTitle {
-    display: flex; align-items: center; font-size: 2em; padding-left: 1em; border-bottom: 1px black;
+    display: flex; align-items: center; font-size: 2em; padding-left: 1em; border-bottom: 1px black;     padding-top: 50px;
 }
 .topContent {
     display :flex; justify-content: center;
