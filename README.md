@@ -7,8 +7,10 @@
 ## DB
 - mariaDB
 
-## front 서버
+## front
 - react js
+- styled component
+- 
 
 ### port 정보
 - API : 8080
