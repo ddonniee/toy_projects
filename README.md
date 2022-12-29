@@ -9,3 +9,7 @@
 
 ## front 서버
 - react js
+
+### port 정보
+- API : 8080
+- REACT : 8081
