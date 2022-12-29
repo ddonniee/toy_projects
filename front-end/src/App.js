@@ -40,7 +40,7 @@ function App() {
     })
     .then(data=>{
       console.log('data',data)
-      setToken(data)
+      setToken(data.accessToken)
     })
     .catch(err=>{
       setToken(null)

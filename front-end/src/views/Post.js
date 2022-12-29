@@ -14,8 +14,6 @@ export default function Post(){
     const post_num = location.state.post_num;
     const [posts, setPosts] = useState({})
 
-    console.log(token,'process.env.REACT_APP_ACCESS_WRITE')
-
     useLayoutEffect(()=>{
             fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_ADD+`/${post_num}`, {
                 mode:'cors',

@@ -1,22 +1,25 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../App";
 
 // components
 import styled from "styled-components";
 import Button from "./Button";
 
 export default function Header(props) {
-
+    const token = useContext(AppContext);
     const navigate = useNavigate();
     const {isShown,title,url, onReadUrl} = props;
 
     const onCategorize=(e)=>{
         let url = e.target.id;
+
         if(url==='/') {
             onReadUrl(undefined)
         }else {
             onReadUrl(url)
         }
+        
         navigate( url!=='/' ? `/category/${url}`:'/', {
             state: {
                 category: url

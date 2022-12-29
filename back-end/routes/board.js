@@ -1,13 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const auth = require('../config/authMiddleware')
+// const auth = require('../config/authMiddleware')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
-const jwtUtil = require('../utils/jwt-util')
-const redis = require('../utils/redis')
-const redisClient = require('../utils/redis');
 const maria = require('../database/connect/maria');
-const passport = require('../config/passport');
+const passport = require('passport');
+
 router.get('/', function(req,res,next) {
   try {
     let sql ='select * from lists where isShown=1 order by num desc;'
@@ -34,13 +32,16 @@ router.get('/', function(req,res,next) {
   /**
    * 카테고리별 극 목록보기
    */
-  router.get('/sort/:category', function(req,res,next) {
 
+    router.get('/sort/:category', function(req,res,next) {
     try{
       let sql = 'select * from lists where category=? and isShown=1 order by num desc;';
       let params = req.params.category;
       
-      console.log(params,'boardrouter')
+      // if(req.isAuthenticated()){
+      //   return res.redirect('/login')
+      // }
+      // passport
       maria.query(sql, req.params.category, function(err,rows,fields) {
         if(!err){
           res.send(rows)
@@ -165,7 +166,9 @@ router.get('/', function(req,res,next) {
       })
     }
   })
-  router.patch('/write/:num',auth, function(req,res,next) {
+
+ 
+  router.patch('/write/:num', function(req,res,next) {
     try{
       let sql = 'update lists SET title=?, contents=?, category=? where num=? ';
       let params = [req.body.title,req.body.contents, req.body.category,req.params.num]
@@ -191,7 +194,7 @@ router.get('/', function(req,res,next) {
       })
     }
   })
-  router.patch('/delete/:num',auth,function(req,res,next) {
+  router.patch('/delete/:num',function(req,res,next) {
     try{
       let sql = 'update lists SET isShown=0 where num=? ';
       let params = [req.params.num]

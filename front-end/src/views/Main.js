@@ -2,6 +2,7 @@ import React,{useState, useEffect, useLayoutEffect, useContext} from "react";
 import { useNavigate ,useParams,useLocation } from "react-router-dom";
 import styled from "styled-components";
 import moment from "moment/moment";
+import { Cookies } from 'react-cookie';
 // components
 import Button from "../components/Button";
 import Header from "../components/Header";
@@ -13,8 +14,6 @@ import { AppContext } from "../App";
 
 export default function Main(props){
 
-    
-    let params = useParams();
     let location = useLocation();
     let navigate = useNavigate();
     const token = useContext(AppContext);
@@ -27,8 +26,6 @@ export default function Main(props){
         url:''
     })
     
-    console.log('location',location)
-
     const onClickPost=(e,num)=>{
         let url = num;
         navigate(`/read/${url}`, {
@@ -104,24 +101,24 @@ export default function Main(props){
     }
 
     function logout() {
-        fetch(process.env.REACT_APP_SERVER_ADDRESS+'/users/logout', {
-            mode:'cors',
-            headers:{
-                'Content-Type' : 'application/json',
-                'Accept' : 'application/json',
-                'Access-Control-Allow-Origin':'*',
-                'Authorization':'Bearer ' + token,
-            }
-        })
-        .then(res=> {
-            return res.json();
-        })
-        .then(data=>{
-            setPosts(data)
-        })
-        .catch((err)=> 
-            console.log(err)
-        );
+        // fetch(process.env.REACT_APP_SERVER_ADDRESS+'/users/logout', {
+        //     mode:'cors',
+        //     headers:{
+        //         'Content-Type' : 'application/json',
+        //         'Accept' : 'application/json',
+        //         'Access-Control-Allow-Origin':'*',
+        //         'Authorization':'Bearer ' + token,
+        //     }
+        // })
+        // .then(res=> {
+        //     return res.json();
+        // })
+        // .then(data=>{
+        //     setPosts(data)
+        // })
+        // .catch((err)=> 
+        //     console.log(err)
+        // );
     }
     // fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD, {
          useLayoutEffect(()=>{
