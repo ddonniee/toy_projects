@@ -23,6 +23,7 @@ export default function Post(){
                     'Content-Type' : 'application/json',
                     'Accept' : 'application/json',
                     'Access-Control-Allow-Origin':'*',
+                    'Authorization':'Bearer ' + token,
                 }
             })
             .then(res=> {

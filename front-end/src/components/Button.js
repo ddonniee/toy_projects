@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 export default function Button(props) {
     const {title, url} = props;
-    console.log(props)
     return(
         <ButtonStyle>
             <div className="buttonWrapper">

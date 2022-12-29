@@ -14,7 +14,7 @@ var maria = require('../database/connect/maria');
 
 passport.serializeUser(function (user, done) {
   console.log("serializeUser ", user);
-  done(null, user.ID);
+  done(null, user.id);
 });
 passport.deserializeUser(function (id, done) {
   console.log("deserializeUser id ", id);
@@ -25,11 +25,23 @@ passport.deserializeUser(function (id, done) {
     console.log("deserializeUser mysql result : ", result);
     var json = JSON.stringify(result[0]);
     userinfo = JSON.parse(json);
-    done(null, userinfo);
+    done(err, user);
   });
 });
+
+var cookieSaver = function cookieSaver(req) {
+  var token = null;
+
+  if (req && req.cookies) {
+    token = req.cookies['token'];
+  }
+
+  return token;
+};
+
 var JWTConfig = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: cookieSaver,
+  // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_KEY
 };
 
@@ -39,14 +51,14 @@ var JWTVerify = function JWTVerify(jwtPayload, done) {
       switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          console.log(jwtPayload.id);
+          console.log(jwtPayload.id, 'payload');
 
           if (!user) {
             _context.next = 5;
             break;
           }
 
-          done(null, 'user');
+          done(null, user);
           return _context.abrupt("return");
 
         case 5:

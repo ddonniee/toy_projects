@@ -7,8 +7,6 @@ import Button from "./Button";
 
 export default function Header(props) {
 
-    console.log(props)
-    
     const navigate = useNavigate();
     const {isShown,title,url, onReadUrl} = props;
 
@@ -52,7 +50,7 @@ ul, li {
     list-style:none;
 }
 .headerWrapper {
-    height: 17vh;
+    height: 17vh;     padding-bottom: 50px;
 }
 .info p {
     font-size: 4em;

@@ -89,6 +89,7 @@ export default function Main(props){
                 'Content-Type' : 'application/json',
                 'Accept' : 'application/json',
                 'Access-Control-Allow-Origin':'*',
+                'Authorization':'Bearer ' + token,
             }
         })
         .then(res=> {
@@ -102,6 +103,26 @@ export default function Main(props){
         );
     }
 
+    function logout() {
+        fetch(process.env.REACT_APP_SERVER_ADDRESS+'/users/logout', {
+            mode:'cors',
+            headers:{
+                'Content-Type' : 'application/json',
+                'Accept' : 'application/json',
+                'Access-Control-Allow-Origin':'*',
+                'Authorization':'Bearer ' + token,
+            }
+        })
+        .then(res=> {
+            return res.json();
+        })
+        .then(data=>{
+            setPosts(data)
+        })
+        .catch((err)=> 
+            console.log(err)
+        );
+    }
     // fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD, {
          useLayoutEffect(()=>{
             if(location.pathname==='/') {
@@ -147,6 +168,7 @@ export default function Main(props){
                     }
                     
                 </table>
+                <input type='button' onClick={(e)=>{logout(e)}} value='로그아웃'></input>
             </div>
         </div>
         </MainStyle>
@@ -155,13 +177,24 @@ export default function Main(props){
 
 const MainStyle = styled.div`
 table {
-    width: 100vw;     border-top: 1px solid;
+    width: 100vw;  border-top: 1px solid;table-layout: fixed
+}
+table th:first-child,
+table th:last-child{
+    width: 7%;
+}
+table th:nth-child(2){
+    width: 50%;
+}
+table th:nth-child(3),
+table th:nth-child(4){
+    width: 16%;
 }
 .contents {
     height: 100vh;
 }
 .categoryTitle {
-    display: flex; align-items: center; font-size: 2em; padding-left: 1em; border-bottom: 1px black;     padding-top: 50px;
+    display: flex; align-items: center; font-size: 2em; padding-left: 1em; border-bottom: 1px black;  
 }
 .topContent {
     display :flex; justify-content: center;

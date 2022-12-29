@@ -107,6 +107,7 @@ export default function Edit() {
                     'Content-Type' : 'application/json',
                     'Accept' : 'application/json',
                     'Access-Control-Allow-Origin':'*',
+                    'Authorization':'Bearer ' + token,
                 }
             })
             .then(res=> {
@@ -125,7 +126,7 @@ export default function Edit() {
         }
     },[method])
 
-    console.log('data',posts)
+    console.log('data',token)
     return(
         <EditStyle height={posts.contents.length}>
         <div className="editWrapper">

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
+
 import styled from "styled-components";
 import Header from "../components/Header";
-export default function Login(props) {
 
+export default function Login(props) {
     const {onChange, onClick} = props;
     return (
         <LoginStyle>
@@ -24,6 +25,7 @@ export default function Login(props) {
 }
 
 const LoginStyle = styled.div`
+
     .loginInfo {
         display: flex; text-align: center; justify-content: center;  height: 150px;
     }

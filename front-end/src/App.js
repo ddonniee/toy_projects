@@ -1,17 +1,18 @@
 import './App.css';
-import React, {createContext, useEffect} from 'react';
+import React, {createContext, useEffect,useLayoutEffect,useState} from 'react';
 import {BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Cookies } from 'react-cookie';
 // components
 import Main from './views/Main'
 import Edit from './views/Edit';
 import Post from './views/Post';
 import Login from './views/Login';
-import { useLayoutEffect, useState } from 'react';
 
 export const AppContext = createContext();
 
 function App() {
   
+  const cookies = new Cookies();
   const [login, setLogin] = useState({
     id:null,
     password:null,
@@ -26,6 +27,7 @@ function App() {
     await fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_AUTH, {
         method:'POST',
         mode:'cors',
+        credentials: 'include',
         headers:{
             'Content-Type' : 'application/json',
             'Accept' : 'application/json',
@@ -38,10 +40,10 @@ function App() {
     })
     .then(data=>{
       console.log('data',data)
-      setToken(data.token)
+      setToken(data)
     })
     .catch(err=>{
-        console.log(err)
+      setToken(null)
     })
 }
 const onSaveInfo=(e)=>{
@@ -62,15 +64,25 @@ const onSaveInfo=(e)=>{
       })
   }
 }
+
+function getCookie() {
+  return cookies.get('token')
+}
 const onSubmitInfo=(e)=>{
   console.log('야호')
 }
 useEffect(()=>{
   if(token!==null){
-    console.log('=====================!!')
     setIsLogin(true)
   }
 },[token])
+
+useLayoutEffect(()=>{
+  let temp = getCookie();
+  if(temp!==undefined) {
+    setToken(temp)
+  }
+},[])
 
 console.log(token,'tokentokentokentoken')
   return (

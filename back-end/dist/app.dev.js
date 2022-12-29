@@ -22,14 +22,17 @@ var usersRouter = require('./routes/users');
 var boardRouter = require('./routes/board');
 
 var app = express();
+
+var session = require('express-session');
 /**
  * mariaDB connect
  */
 
+
 var maria = require('./database/connect/maria');
 
 maria.connect();
-var safeSiteList = ['http://192.168.0.77:8081', 'http://localhost:8081'];
+var safeSiteList = ['http://192.168.0.77:8081', 'http://localhost:8081', 'http://192.168.0.12:8081'];
 app.use(cors({
   origin: function origin(_origin, callback) {
     var isSafeSiteListed = safeSiteList.indexOf(_origin) !== -1;
@@ -49,7 +52,23 @@ app.use(express.urlencoded({
 app.use(express.json());
 app.use(cookieParser());
 app.use(express["static"](path.join(__dirname, 'public')));
+app.use(session({
+  // 옵션은 반드시 넣어줘야 한다.
+  resave: false,
+  // 매번 세션 강제 저장
+  saveUninitialized: false,
+  // 빈 값도 저장
+  secret: process.env.JWT_KEY,
+  // cookie 암호화 키. dotenv 라이브러리로 감춤
+  cookie: {
+    httpOnly: true,
+    // javascript로 cookie에 접근하지 못하게 하는 옵션
+    secure: false // https 프로토콜만 허락하는 지 여부
+
+  }
+}));
 app.use(passport.initialize());
+app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/board', boardRouter);
