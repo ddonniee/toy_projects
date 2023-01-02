@@ -1,16 +1,18 @@
-import React, { useState,useContext, useLayoutEffect, useEffect } from "react";
-
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { AppContext } from "../App";
 import styled from "styled-components";
 import Header from "../components/Header";
 
 export default function Login(props) {
     const {onChange, onClick} = props;
-    
+    const params = useParams();
+    const [paramId, setParamId] = useState(params);
+
     return (
         <LoginStyle>
         <div className="loginWrapper">
-            <Header />
+            <Header title='로그인 페이지' onReadUrl={setParamId}/>
             <h1>로그인</h1>
             <form className="loginInfo">
                 <div>

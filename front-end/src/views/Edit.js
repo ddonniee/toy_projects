@@ -24,7 +24,7 @@ export default function Edit() {
     })
     
     let params = useParams();
-
+    const [paramId, setParamId] = useState(params);
     const onSavePost = (e) =>{
         console.log(e.target.value,'eeeeeeeeeeeeeeee')
         let checkData = e.target.id;
@@ -135,7 +135,7 @@ export default function Edit() {
     return(
         <EditStyle height={posts.contents.length}>
         <div className="editWrapper">
-            <Header user={auth ? 'writer':'guest'} />
+            <Header title='로그인 페이지' onReadUrl={setParamId}/>
              <form method={method} encType="multipart/form-data">
             <div className="editTop">
                 {/* <label htmlFor="title"> */}
