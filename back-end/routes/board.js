@@ -6,28 +6,37 @@ const jwt = require('jsonwebtoken')
 const maria = require('../database/connect/maria');
 const passport = require('passport');
 
-router.get('/', function(req,res,next) {
-  try {
-    let sql ='select * from lists where isShown=1 order by num desc;'
-    maria.query(sql, function(err, rows, fields) {
-      console.log('mariadb 접속')
-      if(!err) {
-        res.send(rows)
-      }else {
-        res.send({
-          code: 400,
-          msg: 'FAIL'
-        })
-      }
-    })
-  }
-  catch{
-    res.send({
-      code:400,
-      msg:'FAIL',
-    })
-  }
-  })
+router.get('/',passport.authenticate('jwt', {session:false}), 
+  async (req,res,next)=>{
+    console.log('글목록')
+    try {
+      let sql ='select * from lists where isShown=1 order by num desc;'
+      maria.query(sql, function(err, rows, fields) {
+        console.log('mariadb 접속')
+        if(!err) {
+          // 인증되지 않은 경우 req.user의 값은 false,
+          if(req.user) {
+            try {
+              res.json(rows)
+            }
+            catch {
+              res.json({result : false})
+            }
+          }else {
+            console.log('------------------')
+          }
+        }else {
+          res.status(400).json({msg: fields})
+        }
+      })
+    }
+    catch{
+      res.send({
+        code:400,
+        msg:'FAIL',
+      })
+    }
+  });
 
   /**
    * 카테고리별 극 목록보기

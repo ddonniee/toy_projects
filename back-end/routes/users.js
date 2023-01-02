@@ -25,7 +25,7 @@ router.post('/', (req,res,next)=>{
     const params = [userId, userPw]
     // 회원정보 일치하는 경우 results에 담김
 
-    console.log(req.cookies,'==')
+    console.log(req,'users==')
     maria.query(sql, params, function(err,results, fields){
       if(err) {
         console.log(err)
@@ -44,7 +44,7 @@ router.post('/', (req,res,next)=>{
         })
         let accessToken = jwt.sign({
           id: userId, pw:userPw
-      }, key, {expiresIn: '1m'})
+      }, key, {expiresIn: '1d'})
 
       res.cookie('token',accessToken)
       res.send({accessToken})

@@ -1,5 +1,5 @@
 import React,{useState, useEffect, useLayoutEffect, useContext} from "react";
-import { useNavigate ,useParams,useLocation } from "react-router-dom";
+import { useNavigate ,useParams,useLocation, redirect } from "react-router-dom";
 import styled from "styled-components";
 import moment from "moment/moment";
 import { Cookies } from 'react-cookie';
@@ -83,13 +83,17 @@ export default function Main(props){
         fetch(paramId === undefined ? process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD : process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_CATEGORY+'/'+paramId, {
             mode:'cors',
             headers:{
-                'Content-Type' : 'application/json',
                 'Accept' : 'application/json',
                 'Access-Control-Allow-Origin':'*',
                 'Authorization':'Bearer ' + token,
             }
         })
         .then(res=> {
+            console.log(res)
+            if(res.statusText==='Unauthorized') {
+                alert('인증이 필요합니다.')
+                window.location.replace('/login')
+            }
             return res.json();
         })
         .then(data=>{
@@ -127,8 +131,8 @@ export default function Main(props){
             }else {
                 setParamId(location.state.category)
             }
-            getLists()
             checkLogin()
+            getLists()
         },[])
 
         useEffect(()=>{
