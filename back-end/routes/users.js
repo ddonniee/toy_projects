@@ -47,7 +47,13 @@ router.post('/', (req,res,next)=>{
       }, key, {expiresIn: '1d'})
 
       res.cookie('token',accessToken)
-      res.send({accessToken})
+      res.cookie('id', results[0].user_id)
+      res.cookie('name',results[0].user_name)
+      res.send({
+        accessToken: accessToken,
+        id: results[0].user_id,
+        name: results[0].user_name
+      })
       }
     })
   }catch(err){

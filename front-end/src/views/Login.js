@@ -1,10 +1,12 @@
-import React, { useState,useRef } from "react";
+import React, { useState,useContext, useLayoutEffect, useEffect } from "react";
 
+import { AppContext } from "../App";
 import styled from "styled-components";
 import Header from "../components/Header";
 
 export default function Login(props) {
     const {onChange, onClick} = props;
+    
     return (
         <LoginStyle>
         <div className="loginWrapper">

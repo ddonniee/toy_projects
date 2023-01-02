@@ -8,24 +8,25 @@ import { AppContext } from "../App";
 
 export default function Edit() {
 
-    const token = useContext(AppContext);
+    const user = useContext(AppContext);
     const [auth,setAuth] = useState(true)
     const [method, setMethod] = useState('POST') // params.id 존재시 카드 수정, 미존재시 카드 생성으로 나누는 기준
     const [posts,setPosts] = useState({
         num:'',
         writer_num:0,
         title:'',
-        writer:'donnie',
+        writer:'',
         contents:'',
         insert_date:'',
         isShown:'',
-        category:'사내프로젝트',
+        category:'사내 프로젝트',
         hits: 0,
     })
     
     let params = useParams();
 
     const onSavePost = (e) =>{
+        console.log(e.target.value,'eeeeeeeeeeeeeeee')
         let checkData = e.target.id;
         let data = e.target.value;
 
@@ -56,7 +57,7 @@ export default function Edit() {
         let posting = {
             // num:posts.writer_num,
             num:1,
-            writer: posts.writer,
+            writer: user.id,
             title : posts.title,
             contents: posts.contents,
             category: posts.category
@@ -68,14 +69,18 @@ export default function Edit() {
             headers:{
                 'Content-type':'application/json',
                 'Access-Control-Allow-Origin': '*',
-                // 'Authorization':'Bearer ' + token,
+                'Authorization':'Bearer ' + user.token,
             },
             body: JSON.stringify(posting),
         })
         .then((response)=>{
-            console.log(posting)
+            console.log(response)
             if(response.ok){
                 alert('저장되었습니다.')
+                window.location.replace('/')
+            }else {
+                alert('로그인이 필요합니다.')
+                window.location.replace('/login')
             }
         })
         .catch((e)=> {console.log(e)})
@@ -107,7 +112,7 @@ export default function Edit() {
                     'Content-Type' : 'application/json',
                     'Accept' : 'application/json',
                     'Access-Control-Allow-Origin':'*',
-                    'Authorization':'Bearer ' + token,
+                    'Authorization':'Bearer ' + user.token,
                 }
             })
             .then(res=> {
@@ -126,7 +131,7 @@ export default function Edit() {
         }
     },[method])
 
-    console.log('data',token)
+    
     return(
         <EditStyle height={posts.contents.length}>
         <div className="editWrapper">
@@ -136,7 +141,7 @@ export default function Edit() {
                 {/* <label htmlFor="title"> */}
                     <input type="text" maxLength="100" id="postTitle" name="title" onChange={(e)=>onSavePost(e)} value={posts.title} placeholder="제목을 입력하세요."></input>
                 {/* </label> */}
-                <select className="categories" value='사내 프로젝트' onChange={(e)=>onSavePost(e)}>
+                <select className="categories" value={posts.category} onChange={(e)=>onSavePost(e)}>
                     <option value="사내프로젝트">사내 프로젝트</option>
                     <option value="SI프로젝트">SI 프로젝트</option>
                     <option value="개인프로젝트"> 개인 프로젝트</option>

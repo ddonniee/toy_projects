@@ -116,36 +116,8 @@ router.get('/',passport.authenticate('jwt', {session:false}),
     })
   })
 
-  // router.post('/write',auth, function(req,res,next) {
-  //   try{
-  //     let post_num = new Date().getTime();
-  //     post_num = JSON.stringify(req.body.num) + JSON.stringify(post_num) ;
-  //     let sql = 'insert into lists (num,user_num,writer,title,contents,category) values (?,?,?,?,?,?)';
-  //     let params = [post_num,req.body.num,req.body.writer, req.body.title, req.body.contents, req.body.category]
-  //     maria.query(sql, params, function(err,rows,fields) {
-  //       if(!err){
-  //         res.send({
-  //           code: 200,
-  //           msg: 'SUCCESS',
-  //           resdata: res.body
-  //         })
-  //       }else {
-  //         res.send({
-  //           code: 400,
-  //           msg:err
-  //         })
-  //       }
-  //     })
-  //   }
-  //   catch {
-  //     res.send({
-  //       code: 400,
-  //       msg:'FAIL'
-  //     })
-  //   }
-  // })
-
-  router.post('/write', function(req,res,next) {
+  router.post('/write',passport.authenticate('jwt', {session:false}), 
+    async (req,res,next) => {
     try{
       let post_num = new Date();
       console.log(post_num,'post_num')
@@ -154,11 +126,18 @@ router.get('/',passport.authenticate('jwt', {session:false}),
       let params = [post_num,req.body.num,req.body.writer, req.body.title, req.body.contents, req.body.category]
       maria.query(sql, params, function(err,results,fields) {
         if(!err){
-          res.send({
-            code: 200,
-            msg: 'SUCCESS',
-            resdata: res.body
-          })
+          try {
+            res.send({
+              code: 200,
+              msg: 'SUCCESS',
+              resdata: res.body
+            })
+          }catch (err) {
+            res.send({
+              code: 00,
+              msg: 'null token'
+            })
+          }
         }
         else {
           res.send({
@@ -175,7 +154,36 @@ router.get('/',passport.authenticate('jwt', {session:false}),
       })
     }
   })
-
+  // router.post('/write', function(req,res,next) {
+  //   try{
+  //     let post_num = new Date();
+  //     console.log(post_num,'post_num')
+  //     post_num = JSON.stringify(req.body.num) + JSON.stringify(post_num.getFullYear()) + JSON.stringify(post_num.getMonth()+1) + JSON.stringify(post_num.getDate()) + JSON.stringify(post_num.getTime());
+  //     let sql = 'insert into lists (num,user_num,writer,title,contents,category) values (?,?,?,?,?,?)';
+  //     let params = [post_num,req.body.num,req.body.writer, req.body.title, req.body.contents, req.body.category]
+  //     maria.query(sql, params, function(err,results,fields) {
+  //       if(!err){
+  //         res.send({
+  //           code: 200,
+  //           msg: 'SUCCESS',
+  //           resdata: res.body
+  //         })
+  //       }
+  //       else {
+  //         res.send({
+  //           code:400,
+  //           msg:'FAIL'
+  //         })
+  //       }
+  //     })
+  //   }
+  //   catch(err){
+  //     res.send({
+  //       code: 400,
+  //       msg: 'FAIL'
+  //     })
+  //   }
+  // })
   router.get('/write/:num', function(req,res,next) {
     try{
       let sql = 'select * from lists where num=?';

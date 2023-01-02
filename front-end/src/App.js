@@ -17,8 +17,13 @@ function App() {
     id:null,
     password:null,
   })
+  const [user, setUser] = useState({
+    id:cookies.get('id'),
+    name:cookies.get('name'),
+    token: cookies.get('token')
+  })
   const [isLogin, setIsLogin] = useState(false)
-  const [token, setToken] = useState(cookies.get('token'))
+
   async function checkAuth() {
     let userInfo = {
         userId: login.id,
@@ -40,10 +45,15 @@ function App() {
     })
     .then(data=>{
       console.log('data',data)
-      setToken(data.accessToken)
+      // setToken(data.accessToken)
+      setUser({
+        ...user,
+        id: data.id,
+        name: data.name,
+        token: data.accessToken,
+      })
     })
     .catch(err=>{
-      setToken(null)
     })
 }
 const onSaveInfo=(e)=>{
@@ -65,27 +75,18 @@ const onSaveInfo=(e)=>{
   }
 }
 
-function getCookie() {
-  return cookies.get('token')
-}
 const onSubmitInfo=(e)=>{
   console.log('야호')
 }
 useEffect(()=>{
-  if(token!==null){
+  if(user.token!==null){
     setIsLogin(true)
   }
-},[token])
-
-useLayoutEffect(()=>{
-  let temp = getCookie();
-  if(temp!==undefined) {
-    setToken(temp)
-  }
-},[])
+},[user.token])
+console.log('ㅇㅇㅇ',user)
 
   return (
-    <AppContext.Provider value={token}>
+    <AppContext.Provider value={user}>
         <BrowserRouter>
         <div className="App">
           <div className='content'>
@@ -97,7 +98,7 @@ useLayoutEffect(()=>{
               <Route excact path="/" element={<Main/>}></Route>
               }
               <Route excact path="/" element={<Main/>}></Route>
-              {/* <Route excact path="/login" element={<Login onChange={onSaveInfo} onClick={checkAuth}/>}></Route> */}
+              <Route excact path="/login" element={<Login onChange={onSaveInfo} onClick={checkAuth}/>}></Route>
               <Route path="/category/:id" element={<Main/>}></Route>
               <Route path="/read/:id" element={<Post/>}></Route>
               <Route path="/write" element={<Edit/>}></Route>

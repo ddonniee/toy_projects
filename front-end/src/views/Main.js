@@ -7,8 +7,7 @@ import { Cookies } from 'react-cookie';
 import Button from "../components/Button";
 import Header from "../components/Header";
 // svgs
-import Edit from "../public/images/edit.png"
-import Delete from "../public/images/delete.png"
+
 import New from '../public/images/new.png'
 import { AppContext } from "../App";
 
@@ -16,8 +15,9 @@ export default function Main(props){
 
     let location = useLocation();
     let navigate = useNavigate();
-    const token = useContext(AppContext);
+    const user = useContext(AppContext);
 
+    const time =new Date();
     const [isLogin, setIsLogin] = useState(false)
     const [posts, setPosts] = useState([])
     const [paramId, setParamId] = useState()
@@ -34,35 +34,9 @@ export default function Main(props){
             }
         })
     }
-    const onDeletePost=(e,num)=>{
-
-        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_DEL+`/${num}`, {
-            mode:'cors',
-            method:'PATCH',
-            headers:{
-                'Content-Type' : 'application/json',
-                'Accept' : 'application/json',
-                'Access-Control-Allow-Origin':'*',
-                'Authorization':'Bearer ' + token,
-            }
-        })
-        .then(res=> {
-            console.log(res,'resresee')
-            return res.json();
-        })
-        .then((data)=>{
-            if(data.code===200) {
-                alert('삭제 완료')
-            }
-        })
-        .catch((err)=> 
-            console.log(err)
-        );
-    }
 
     function checkLogin() {
-        console.log(token)
-        if(token!==null) {
+        if(user.token!==null) {
             // if(token==null) {
             setBtnDetail({
                 ...btnDetail,
@@ -74,7 +48,7 @@ export default function Main(props){
             setBtnDetail({
                 ...btnDetail,
                 title:'로그인하기',
-                url:'/'
+                url:'/login'
             })
         }
     }
@@ -85,14 +59,14 @@ export default function Main(props){
             headers:{
                 'Accept' : 'application/json',
                 'Access-Control-Allow-Origin':'*',
-                'Authorization':'Bearer ' + token,
+                'Authorization':'Bearer ' + user.token,
             }
         })
         .then(res=> {
             console.log(res)
             if(res.statusText==='Unauthorized') {
                 alert('인증이 필요합니다.')
-                window.location.replace('/')
+                window.location.replace('/login')
             }
             return res.json();
         })
@@ -139,6 +113,7 @@ export default function Main(props){
             getLists()
         },[paramId])
 
+        console.log(user.token,'tokenn')
     
     return(
         <MainStyle>
@@ -160,7 +135,7 @@ export default function Main(props){
                             return(
                             <tr key={`list`+index} name={post.num} onClick={(e)=>onClickPost(e,post.num)}>
                                 <td>{(posts.length)-(index)}</td>
-                                <td>{post.title}</td>
+                                <td>{post.title} {moment(time).diff(moment(post.insert_date), "seconds") <= (3600 * 25) ? <img src = {New} /> : null}</td>
                                 <td>{post.writer}</td>
                                 <td>{moment(post.insert_date).format('YYYY-MM-DD HH:mm:ss')}</td>
                                 <td>{post.hits}</td>
@@ -225,5 +200,8 @@ table th:nth-child(4){
 }
 .lists tr > td:nth-child(2) {
     text-align: initial;
+}
+.lists tr > td:nth-child(2) > img {
+    width: 20px;     vertical-align: text-bottom;
 }
 `
