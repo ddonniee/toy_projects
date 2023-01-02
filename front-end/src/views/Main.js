@@ -74,7 +74,7 @@ export default function Main(props){
             setBtnDetail({
                 ...btnDetail,
                 title:'로그인하기',
-                url:'/login'
+                url:'/'
             })
         }
     }
@@ -92,7 +92,7 @@ export default function Main(props){
             console.log(res)
             if(res.statusText==='Unauthorized') {
                 alert('인증이 필요합니다.')
-                window.location.replace('/login')
+                window.location.replace('/')
             }
             return res.json();
         })
@@ -139,6 +139,7 @@ export default function Main(props){
             getLists()
         },[paramId])
 
+    
     return(
         <MainStyle>
         <div className="mainWrapper">

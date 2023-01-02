@@ -18,7 +18,7 @@ function App() {
     password:null,
   })
   const [isLogin, setIsLogin] = useState(false)
-  const [token, setToken] = useState(null)
+  const [token, setToken] = useState(cookies.get('token'))
   async function checkAuth() {
     let userInfo = {
         userId: login.id,
@@ -84,20 +84,20 @@ useLayoutEffect(()=>{
   }
 },[])
 
-console.log(token,'tokentokentokentoken')
   return (
     <AppContext.Provider value={token}>
         <BrowserRouter>
         <div className="App">
           <div className='content'>
             <Routes>
-            {token == undefined || token == null
+            {!isLogin
               ?
               <Route excact path="/" element={<Login onChange={onSaveInfo} onClick={checkAuth}/>}></Route>
               :
               <Route excact path="/" element={<Main/>}></Route>
               }
-              <Route excact path="/login" element={<Login onChange={onSaveInfo} onClick={checkAuth}/>}></Route>
+              <Route excact path="/" element={<Main/>}></Route>
+              {/* <Route excact path="/login" element={<Login onChange={onSaveInfo} onClick={checkAuth}/>}></Route> */}
               <Route path="/category/:id" element={<Main/>}></Route>
               <Route path="/read/:id" element={<Post/>}></Route>
               <Route path="/write" element={<Edit/>}></Route>

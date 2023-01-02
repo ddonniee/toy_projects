@@ -8,7 +8,6 @@ const passport = require('passport');
 
 router.get('/',passport.authenticate('jwt', {session:false}), 
   async (req,res,next)=>{
-    console.log('글목록')
     try {
       let sql ='select * from lists where isShown=1 order by num desc;'
       maria.query(sql, function(err, rows, fields) {
@@ -41,19 +40,20 @@ router.get('/',passport.authenticate('jwt', {session:false}),
   /**
    * 카테고리별 극 목록보기
    */
-
-    router.get('/sort/:category', function(req,res,next) {
+   router.get('/sort/:category', passport.authenticate('jwt', {session:false}), 
+   async(req,res,next) => {
     try{
       let sql = 'select * from lists where category=? and isShown=1 order by num desc;';
       let params = req.params.category;
-      
-      // if(req.isAuthenticated()){
-      //   return res.redirect('/login')
-      // }
-      // passport
-      maria.query(sql, req.params.category, function(err,rows,fields) {
+      maria.query(sql, params, function(err,rows,fields) {
+        console.log(params)
         if(!err){
-          res.send(rows)
+          try {
+            res.send(rows)
+          }catch(err) {
+            res.send({result:false})
+          }
+          
         }else {
           res.send({
             code: 400,
@@ -69,6 +69,33 @@ router.get('/',passport.authenticate('jwt', {session:false}),
       })
     }
   })
+  //   router.get('/sort/:category', function(req,res,next) {
+  //   try{
+  //     let sql = 'select * from lists where category=? and isShown=1 order by num desc;';
+  //     let params = req.params.category;
+      
+  //     // if(req.isAuthenticated()){
+  //     //   return res.redirect('/login')
+  //     // }
+  //     // passport
+  //     maria.query(sql, req.params.category, function(err,rows,fields) {
+  //       if(!err){
+  //         res.send(rows)
+  //       }else {
+  //         res.send({
+  //           code: 400,
+  //           msg:err
+  //         })
+  //       }
+  //     })
+  //   }
+  //   catch {
+  //     res.send({
+  //       code: 400,
+  //       msg:'FAIL'
+  //     })
+  //   }
+  // })
   router.patch('/hits/:num', function(req,res,next) {
     console.log('hits',req.body.hits)
     let sql = 'update lists SET hits=? where num=?';
