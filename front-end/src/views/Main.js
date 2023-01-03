@@ -15,8 +15,12 @@ export default function Main(props){
 
     let location = useLocation();
     let navigate = useNavigate();
-    const user = useContext(AppContext);
-
+    const text = useContext(AppContext);
+    const [user, setUser] = useState({
+        id: text.id,
+        name: text.name,
+        token: text.token
+    })
     const time =new Date();
     const [isLogin, setIsLogin] = useState(false)
     const [posts, setPosts] = useState([])
@@ -65,6 +69,7 @@ export default function Main(props){
         .then(res=> {
             console.log(res)
             if(res.statusText==='Unauthorized') {
+                console.log(res)
                 alert('인증이 필요합니다.')
                 window.location.replace('/login')
             }
@@ -79,24 +84,24 @@ export default function Main(props){
     }
 
     function logout() {
-        // fetch(process.env.REACT_APP_SERVER_ADDRESS+'/users/logout', {
-        //     mode:'cors',
-        //     headers:{
-        //         'Content-Type' : 'application/json',
-        //         'Accept' : 'application/json',
-        //         'Access-Control-Allow-Origin':'*',
-        //         'Authorization':'Bearer ' + token,
-        //     }
-        // })
-        // .then(res=> {
-        //     return res.json();
-        // })
-        // .then(data=>{
-        //     setPosts(data)
-        // })
-        // .catch((err)=> 
-        //     console.log(err)
-        // );
+        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_LOGOUT, {
+            method:'GET',
+            mode:'cors',
+            credentials: 'include',
+            headers:{
+                'Accept' : 'application/json',
+                'Access-Control-Allow-Origin':'*',
+            }
+        }) 
+        .then(res=>{
+            if(res.ok) {
+                alert('로그아웃되었습니다.')
+                window.location.replace('/login')
+            }
+        })
+        .catch((err)=>{console.log('errerrerrerrerrerrerrerrerrerrerr',err)})
+        
+        
     }
     // fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD, {
          useLayoutEffect(()=>{

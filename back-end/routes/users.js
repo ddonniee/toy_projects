@@ -25,18 +25,21 @@ router.post('/', (req,res,next)=>{
     const params = [userId, userPw]
     // 회원정보 일치하는 경우 results에 담김
 
-    console.log(req,'users==')
-    maria.query(sql, params, function(err,results, fields){
+    maria.query(sql, params, function( err,results, fields){
+      
+      // 500 error
       if(err) {
-        console.log(err)
         return next(err)
-      }else if(results[0] == '[]' ){
+      }
+      // user not found
+      else if(results[0] == '[]' ){
         return res.json({
           code: 400,
           message: 'not joined'
       })
-      }else if(results[0] != undefined) {
-        passport.authenticate('signin', {
+      }
+      else if(results[0] != undefined) {
+        passport.authenticate('login', {
           successRedirect: '/',
           failureRedirect:'/login',
           session:false,
@@ -44,9 +47,9 @@ router.post('/', (req,res,next)=>{
         })
         let accessToken = jwt.sign({
           id: userId, pw:userPw
-      }, key, {expiresIn: '1d'})
+      }, key, {expiresIn: '1h'})
 
-      res.cookie('token',accessToken)
+      res.cookie('token',accessToken, {maxAge: 60 * 60 * 3600}) // 토큰 시간 1시간으로 설정
       res.cookie('id', results[0].user_id)
       res.cookie('name',results[0].user_name)
       res.send({
@@ -54,6 +57,7 @@ router.post('/', (req,res,next)=>{
         id: results[0].user_id,
         name: results[0].user_name
       })
+      console.log('22 request11',req.login)
       }
     })
   }catch(err){
@@ -62,6 +66,26 @@ router.post('/', (req,res,next)=>{
       msg: err
     })
   }
+})
+
+router.get('/logout', function (req,res,next) {
+  req.logout(function(err) {
+    if(err) {
+      return next(err)
+    }else {
+      console.log('loggggggggggourtloggggggggggourt')
+      res.clearCookie('token');
+      
+      res.json({
+        code:200,
+        message:'SUCCESS'
+      })
+      // res.redirect('/login');
+      // res.clearCookie('token');
+    }
+    
+  });
+  
 })
 
 /**
@@ -101,4 +125,6 @@ router.post('/add', function(req,res,next) {
     })
   }
 })
+
+
 module.exports = router;

@@ -44,14 +44,13 @@ function App() {
         return res.json();
     })
     .then(data=>{
-      console.log('data',data)
-      // setToken(data.accessToken)
       setUser({
         ...user,
         id: data.id,
         name: data.name,
         token: data.accessToken,
       })
+      window.location.replace('/')
     })
     .catch(err=>{
     })
@@ -83,7 +82,6 @@ useEffect(()=>{
     setIsLogin(true)
   }
 },[user.token])
-console.log('ㅇㅇㅇ',user)
 
   return (
     <AppContext.Provider value={user}>

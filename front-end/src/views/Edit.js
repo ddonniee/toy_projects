@@ -135,7 +135,7 @@ export default function Edit() {
     return(
         <EditStyle height={posts.contents.length}>
         <div className="editWrapper">
-            <Header title='로그인 페이지' onReadUrl={setParamId}/>
+            <Header onReadUrl={setParamId}/>
              <form method={method} encType="multipart/form-data">
             <div className="editTop">
                 {/* <label htmlFor="title"> */}
@@ -150,7 +150,7 @@ export default function Edit() {
             <div className="editMiddle">
                 <input type="textarea"  cols="50" rows="8" maxLength="5000" id="postContent" onChange={(e)=>onSavePost(e)} value={posts.contents} ></input>
             </div>
-            <div className="editButtom">
+            <div className="editBottom">
                 <Link to='/'><label htmlFor="cancelPost"><input type="button" value="나가기" id="cancelPost"></input></label></Link>
                 <label htmlFor="tempPost"><input type="button" value="임시저장" id="tempPost"></input></label>
                 <label htmlFor="savePost"><input type="button" value="저장하기" id="savePost" onClick={onSubitPost}></input></label>

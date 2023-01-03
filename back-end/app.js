@@ -17,7 +17,7 @@ const session = require('express-session');
 const maria = require('./database/connect/maria');
 maria.connect();
 
-var safeSiteList = ['http://192.168.0.77:8081','http://localhost:8081','http://192.168.0.12:8081']
+var safeSiteList = ['http://192.168.0.77:8081','http://localhost:8081','http://192.168.0.77:3001']
 
 app.use(cors({
   origin: function(origin, callback) {

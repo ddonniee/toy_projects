@@ -65,11 +65,11 @@ passport.use(
     })
 )
 passport.use(
-    'signin',
+    'login',
     new localStrategy(passportConfig, function(userId, userPw, done) {
         let sql = 'select select * from users where user_id = ? and user_pw = ?';
         maria.query(sql, [userId, userPw], function(err,result) {
-            if(err) console.log('maria db error')
+            if(err) return ('maria db error')
             console.log('db connected')
             let json = JSON.stringify(result[0])
             let userInfo = JSON.parse(json)
@@ -77,4 +77,6 @@ passport.use(
         })
     }) 
 )
+
+
 module.exports = {passport};

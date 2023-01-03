@@ -135,7 +135,7 @@ const PostStyle = styled.div`
         margin: 0; text-align: initial; padding-left: 1.5em; font-size: 2em; color: #B2B0B0;
     }
     .postInfo {
-        padding-left: 3em; font-weight: 500; color: #B2B0B0;     width: calc(100vw - 3em);
+        padding-left: 3em; font-weight: 500; color: #B2B0B0;     width: calc(100vw - 5em);
     }
     .postInfo span {
         padding: 0 8px; color: black;
