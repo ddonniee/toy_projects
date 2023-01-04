@@ -41,7 +41,6 @@ export default function Main(props){
 
     function checkLogin() {
         if(user.token!==null) {
-            // if(token==null) {
             setBtnDetail({
                 ...btnDetail,
                 title:'글 작성하기',
@@ -67,9 +66,7 @@ export default function Main(props){
             }
         })
         .then(res=> {
-            console.log(res)
             if(res.statusText==='Unauthorized') {
-                console.log(res)
                 alert('인증이 필요합니다.')
                 window.location.replace('/login')
             }
@@ -99,11 +96,8 @@ export default function Main(props){
                 window.location.replace('/login')
             }
         })
-        .catch((err)=>{console.log('errerrerrerrerrerrerrerrerrerrerr',err)})
-        
-        
+        .catch((err)=>{console.log(err)})
     }
-    // fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD, {
          useLayoutEffect(()=>{
             if(location.pathname==='/') {
                 setParamId(undefined)
@@ -118,8 +112,6 @@ export default function Main(props){
             getLists()
         },[paramId])
 
-        console.log(user.token,'tokenn')
-    
     return(
         <MainStyle>
         <div className="mainWrapper">
@@ -140,7 +132,7 @@ export default function Main(props){
                             return(
                             <tr key={`list`+index} name={post.num} onClick={(e)=>onClickPost(e,post.num)}>
                                 <td>{(posts.length)-(index)}</td>
-                                <td>{post.title} {moment(time).diff(moment(post.insert_date), "seconds") <= (3600 * 25) ? <img src = {New} /> : null}</td>
+                                <td>{post.title} {moment(time).diff(moment(post.insert_date), "seconds") <= (3600 * 24) ? <img src = {New} /> : null}</td>
                                 <td>{post.writer}</td>
                                 <td>{moment(post.insert_date).format('YYYY-MM-DD HH:mm:ss')}</td>
                                 <td>{post.hits}</td>

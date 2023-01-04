@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { useEffect, useLayoutEffect, useState,useContext } from "react";
-import {useLocation, Link} from 'react-router-dom';
+import {useLocation,useParams, Link} from 'react-router-dom';
 import styled from "styled-components";
 
 import { AppContext } from "../App";
@@ -15,7 +15,8 @@ export default function Post(){
     const user = useContext(AppContext);
     const post_num = location.state.post_num;
     const [posts, setPosts] = useState({})
-
+    const params = useParams();
+    const [paramId, setParamId] = useState(params);
     const onDeletePost=(e,num)=>{
 
         fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_DELETE+`/${post_num}`, {
@@ -29,11 +30,9 @@ export default function Post(){
             }
         })
         .then(res=> {
-            console.log(res,'resresee')
-            return res.json();
-        })
-        .then((data)=>{
-            if(data.code===200) {
+            if(res.statusText==='Unauthorized'){
+                alert('권한이 없습니다.')
+            }else if(res.statusText==='OK') {
                 alert('삭제 완료')
                 window.location.replace('/')
             }
@@ -97,7 +96,7 @@ export default function Post(){
     return (
         <PostStyle>
         <div className="postWrapper">
-            <Header user='guest'/>
+        <Header onReadUrl={setParamId}/>
             <div className="postTop">
                     <p>{posts.category}</p>
                     <h1>{posts.title}</h1>

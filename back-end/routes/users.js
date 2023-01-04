@@ -11,7 +11,7 @@ const passport = require('passport');
 const { runInContext } = require('vm');
 
 /* GET users listing. */
-router.get('/', auth, function(req, res, next) {
+router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 /**
@@ -73,15 +73,11 @@ router.get('/logout', function (req,res,next) {
     if(err) {
       return next(err)
     }else {
-      console.log('loggggggggggourtloggggggggggourt')
       res.clearCookie('token');
-      
       res.json({
         code:200,
         message:'SUCCESS'
       })
-      // res.redirect('/login');
-      // res.clearCookie('token');
     }
     
   });
