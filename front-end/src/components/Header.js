@@ -19,7 +19,6 @@ export default function Header(props) {
         }else {
             onReadUrl(url)
         }
-        
         navigate( url!=='/' ? `/category/${url}`:'/', {
             state: {
                 category: url

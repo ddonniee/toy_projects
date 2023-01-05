@@ -11,9 +11,8 @@ router.get('/',passport.authenticate('jwt', {session:false}),
     
     try {
       if(req.user) {
-        let sql ='select * from lists where isShown=1 order by num desc;'
+      let sql ='select * from lists where isShown=1 order by insert_date desc;'
       maria.query(sql, function(err, rows, fields) {
-        console.log('mariadb 접속')
         if(!err) {
           res.json(rows)
         }else {
@@ -43,7 +42,8 @@ router.get('/',passport.authenticate('jwt', {session:false}),
    async(req,res,next) => {
     try{
       if(req.user) {
-        let sql = 'select * from lists where category=? and isShown=1 order by num desc;';
+        console.log(req.user)
+        let sql = 'select * from lists where category=? and isShown=1 order by insert_date desc;';
         let params = req.params.category;
         maria.query(sql, params, function(err,rows,fields) {
           if(!err){
@@ -94,7 +94,6 @@ router.get('/',passport.authenticate('jwt', {session:false}),
       if(req.user) {
         try{
           let post_num = new Date();
-          console.log(post_num,'post_num')
           post_num = JSON.stringify(req.body.num) + JSON.stringify(post_num.getFullYear()) + JSON.stringify(post_num.getMonth()+1) + JSON.stringify(post_num.getDate()) + JSON.stringify(post_num.getTime());
           let sql = 'insert into lists (num,user_num,writer,title,contents,category) values (?,?,?,?,?,?)';
           let params = [post_num,req.body.num,req.body.writer, req.body.title, req.body.contents, req.body.category]

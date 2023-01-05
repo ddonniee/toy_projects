@@ -26,7 +26,6 @@ export default function Edit() {
     let params = useParams();
     const [paramId, setParamId] = useState(params);
     const onSavePost = (e) =>{
-        console.log(e.target.value,'eeeeeeeeeeeeeeee')
         let checkData = e.target.id;
         let data = e.target.value;
 
@@ -55,8 +54,7 @@ export default function Edit() {
         }
 
         let posting = {
-            // num:posts.writer_num,
-            num:1,
+            num:Number(user.num),
             writer: user.id,
             title : posts.title,
             contents: posts.contents,
@@ -74,7 +72,6 @@ export default function Edit() {
             body: JSON.stringify(posting),
         })
         .then((response)=>{
-            console.log(response)
             if(response.ok){
                 alert('저장되었습니다.')
                 window.location.replace('/')
@@ -95,7 +92,11 @@ export default function Edit() {
      * params.id로 글 생성,수정 페이지 확인하여 method update
      */
     useLayoutEffect(()=>{
-        console.log(params.id,'params.id')
+        
+        if(user.token===undefined) {
+            alert('로그인이 필요합니다')
+            window.location.replace('/login')
+        }
         if(params.id!==undefined){
             setMethod('PATCH')
         }
@@ -131,6 +132,7 @@ export default function Edit() {
         }
     },[method])
 
+    console.log(user,'context')
     
     return(
         <EditStyle height={posts.contents.length}>

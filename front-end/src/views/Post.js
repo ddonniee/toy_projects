@@ -9,17 +9,17 @@ import Header from "../components/Header";
 // svgs
 import Edit from "../public/images/edit.png"
 import Delete from "../public/images/delete.png"
+import Comments from "../components/Comments";
 
 export default function Post(){
     let location = useLocation()
     const user = useContext(AppContext);
-    const post_num = location.state.post_num;
     const [posts, setPosts] = useState({})
     const params = useParams();
-    const [paramId, setParamId] = useState(params);
-    const onDeletePost=(e,num)=>{
-
-        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_DELETE+`/${post_num}`, {
+    const [paramId, setParamId] = useState(params.id);
+    const onDeletePost=()=>{
+        
+        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_DELETE+`/${paramId}`, {
             mode:'cors',
             method:'PATCH',
             headers:{
@@ -43,7 +43,7 @@ export default function Post(){
     }
 
     useLayoutEffect(()=>{
-            fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_ADD+`/${post_num}`, {
+            fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_ADD+`/${paramId}`, {
                 mode:'cors',
                 headers:{
                     'Content-Type' : 'application/json',
@@ -56,7 +56,6 @@ export default function Post(){
                 return res.json();
             })
             .then(data=>{
-                console.log(data.resdata)
                 let temp = data.resdata[0]
                 setPosts({...posts,
                     ...temp
@@ -67,11 +66,11 @@ export default function Post(){
             );
     },[])
     // 조회수 카운팅 API
-    useEffect(()=>{
+    useLayoutEffect(()=>{
         if(posts.title==='' || null) {
             return false
         }
-        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_HITS+`/${post_num}`, {
+        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_HITS+`/${paramId}`, {
                 mode:'cors',
                 method:'PATCH',
                 headers:{
@@ -90,8 +89,6 @@ export default function Post(){
                 console.log(err)
             );
     },[posts])
-
-    console.log('data',user.id, posts.writer)
 
     return (
         <PostStyle>
@@ -116,7 +113,9 @@ export default function Post(){
             <div className="postMiddle">
                 <div>{posts.contents}</div>
             </div>
-            <div className="postBottom"></div>
+            <div className="postBottom">
+                <Comments/>
+            </div>
         </div>
         </PostStyle>
     )
@@ -143,7 +142,7 @@ const PostStyle = styled.div`
         flex-grow : 2; text-align: initial;
     }
     .postMiddle {
-        min-height: 50vh; height: fit-content; padding: 3em; text-align: initial;
+        min-height: 10vh; height: fit-content; padding: 3em; text-align: initial;
     }
     .postEdit{
         margin-top: auto;
@@ -151,5 +150,12 @@ const PostStyle = styled.div`
     }
     .postEdit img {
         width: 30px;
+    }
+    .postBottom {
+        height: fit-content;
+        min-height: 10vh;
+    }
+    .postBottom * {
+        height: auto;
     }
 `

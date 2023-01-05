@@ -52,10 +52,12 @@ router.post('/', (req,res,next)=>{
       res.cookie('token',accessToken, {maxAge: 60 * 60 * 3600}) // 토큰 시간 1시간으로 설정
       res.cookie('id', results[0].user_id)
       res.cookie('name',results[0].user_name)
+      res.cookie('num',results[0].user_num)
       res.send({
         accessToken: accessToken,
+        num:results[0].user_num,
         id: results[0].user_id,
-        name: results[0].user_name
+        name: results[0].user_name,
       })
       console.log('22 request11',req.login)
       }

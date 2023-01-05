@@ -9,6 +9,8 @@ const passportConfig = require('./config/passport');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var boardRouter = require('./routes/board');
+var postsRouter = require('./routes/posts');
+
 var app = express();
 const session = require('express-session');
 /**
@@ -56,6 +58,7 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/board', boardRouter);
+app.use('/posts', postsRouter);
 
 app.get('/board', function (req, res) {
 	res.setHeader('Access-Control-Allow-Origin', '*');

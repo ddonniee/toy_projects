@@ -18,6 +18,7 @@ function App() {
     password:null,
   })
   const [user, setUser] = useState({
+    num:cookies.get('num'),
     id:cookies.get('id'),
     name:cookies.get('name'),
     token: cookies.get('token')

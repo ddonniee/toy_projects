@@ -57,6 +57,7 @@ export default function Main(props){
     }
 
     function getLists() {
+
         fetch(paramId === undefined ? process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_BOARD : process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_CATEGORY+'/'+paramId, {
             mode:'cors',
             headers:{
@@ -69,8 +70,10 @@ export default function Main(props){
             if(res.statusText==='Unauthorized') {
                 alert('인증이 필요합니다.')
                 window.location.replace('/login')
+            }else {
+                return res.json();
             }
-            return res.json();
+           
         })
         .then(data=>{
             setPosts(data)
@@ -105,7 +108,6 @@ export default function Main(props){
                 setParamId(location.state.category)
             }
             checkLogin()
-            getLists()
         },[])
 
         useEffect(()=>{
