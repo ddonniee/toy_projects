@@ -41,7 +41,6 @@ export default function Post(){
             console.log(err)
         );
     }
-
     useLayoutEffect(()=>{
             fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ACCESS_ADD+`/${paramId}`, {
                 mode:'cors',

@@ -4,9 +4,8 @@ const maria = require('../database/connect/maria')
 
 router.get('/comment/:bid', 
     async (req,res,next) => {
-        console.log(req.params.bid,'[[[[[[[[[[[[[[[[[')
         try{
-            let sql = 'select comments.replier, comments.content, comments.cgroup, comments.depth, comments.date from comments inner join lists on comments.bid = lists.num where comments.bid = ? order by cgroup desc, depth;'
+            let sql = 'select comments.replier, comments.content, comments.cgroup, comments.cdepth, comments.date from comments inner join lists on comments.bid = lists.num where comments.bid = ? order by cgroup desc, cdepth;'
             let params = req.params.bid;
             maria.query(sql,params, function(err,rows,fields) {
                 if(err) {
@@ -24,12 +23,13 @@ router.get('/comment/:bid',
         }
 })
 
-router.post('comment/:bid',
+router.post('/comment/add',
     async (req,res,next) => {
         try{
-            let sql = 'insert into comments (bid, cgroup, cdepth, cwriter, ccontent) value(?,?,?,?,?);'
-            let param = req.body;
-            maria.query(sql,param,function(err,rows,fields) {
+            console.log('try',req.body.bid)
+            let sql = 'insert into comments (bid,cgroup,cref,corder,cdepth,replier,content) values (?,?,?,?,?,?,?)';
+            let params = [req.body.bid,req.body.cgroup, req.body.ref,req.body.order, req.body.cdepth, req.body.cwriter, req.body.ccontent]
+            maria.query(sql,params,function(err,rows,fields) {
                 if(err) {
                     return false
                 }else {
@@ -40,6 +40,7 @@ router.post('comment/:bid',
                 }
             })
         }catch{
+            console.log('catch')
             res.send({
                 code:400,
                 msg:'FAIL'

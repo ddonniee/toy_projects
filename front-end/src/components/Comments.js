@@ -16,30 +16,44 @@ export default function Comments(props) {
 
     
     const onAddComment=(e)=>{
-        console.log(e,'eeeeeeeeeeeeeee')
         let reply = {
             bid:paramId,
-            cgroup: 0, // 대댓글일시 parent의 group no,아닐시 maxCgroup
-            cdepth: 0, // 본댓글 0, 대댓글1
+            cgroup: 3, // 대댓글일시 parent의 group no,아닐시 maxCgroup
+            ref:3,
+            order:1,
+            cdepth: 1, // 본댓글 1, 대댓글2
             cwriter: user.id,
             ccontent: commentValue,
         }
-        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_COMMENT+`/${paramId}`, {
+        fetch(process.env.REACT_APP_SERVER_ADDRESS+process.env.REACT_APP_ADD_COMMENT, {
             method:'POST',
             mode:'cors',
             headers:{
-                'Accept' : 'application/json',
+                'Content-type' : 'application/json',
                 'Access-Control-Allow-Origin':'*',
-                'Authorization':'Bearer ' + user.token,
+                // 'Authorization':'Bearer ' + user.token,
             },
             body: JSON.stringify(reply)
         })
         .then((res)=>{
             if(res.ok) {
-                setLists({
-                    ...lists,
-                    reply
-                })
+                let now = new Date();
+                // let temp = lists.concat({
+                //     replier:user.id,
+                //     cdepth:1,
+                //     cgroup:3,
+                //     content:commentValue,
+                //     date:now
+                // });
+                // console.log(temp)
+                setLists(lists.concat({
+                    replier:user.id,
+                    cdepth:1,
+                    cgroup:3,
+                    content:commentValue,
+                    date:now
+                }))
+                setCommentValue('')
             }else {
                 alert('댓글 작성이 실패하였습니다.')
                 return false;
@@ -62,12 +76,9 @@ export default function Comments(props) {
             }
         })
         .then(res=>{
-            console.log(res)
             if(!res.ok) {
-               
                 setLists([])
             }else {
-                 console.log('===================-=-=-=')
                 return res.json();
             }
         })
@@ -79,7 +90,7 @@ export default function Comments(props) {
         })
     },[])
 
-    console.log(lists,'댓글페이지')
+    console.log(lists,'[][][]')
     return(
     <CommentStyle>
         <div className="commentWrapper">
@@ -92,14 +103,14 @@ export default function Comments(props) {
                     {lists.map((list,index)=>{
                         return (
                         <li key={`list`+index} style={
-                            (list.depth===2)
+                            (list.cdepth===2)
                             ?
                             {marginLeft:'2vw'}
                             :
                             null
                         }>
                             <p className="writer" style={
-                                (list.depth===2)
+                                (list.cdepth===2)
                                 ?
                                 {width:'10vw'}
                                 :
@@ -113,10 +124,10 @@ export default function Comments(props) {
                 </ul>
             </div>
             }
-            <form >
+            {/* <form onSubmit="return false;"> */}
                 <input onChange={(e)=>onSaveComment(e)}type='text'/>
-                <label htmlFor="commentBtn" onClick={(e)=>onAddComment(e)} value="게시"><button id="commentBtn"></button>게시</label>
-            </form>
+                <label htmlFor="commentBtn" value="게시"><button type="button" id="commentBtn" onSubmit={false}  onClick={(e)=>onAddComment(e)}></button>게시</label>
+            {/* </form> */}
         </div>
     </CommentStyle>
     )
