@@ -20,6 +20,14 @@
 | --- | --- | --- | --- |
 | /users | POST | token 발급 | body: {user_id, user_pw} |
 | /users/add | POST | 회원가입 | body: {id, pw, name} |
+| /users/logout| POST | 로그아웃 | 토큰 삭제 |
+
+- 📌 posts
+
+| URL | METHOD | 기능 | params |
+| --- | --- | --- | --- |
+| /posts | GET | 해당 게시글 댓글 목룍 읽기 | params.id로 게시글의 댓글 조회 |
+| /posts/add | POST | 댓글 작성 | body: {bid, cgroup, cref, corder, cdepth, replier, content} |
 
 ### 📋 DB 설계
 
@@ -45,3 +53,17 @@
 | user_pw | varchar | not null | x | 사용자 입력값 |
 | user_name | varchar | not null | x | 사용자 입력값 |
 | user_status | int | not null | default = 1 | 0 = inactive, 1=active |
+
+- 📌 comments
+
+| 이름 | 데이터 유형 | null | 기본값 | 설명 |
+| --- | --- | --- | --- | --- |
+| cid | int | not null | auto_increment | 댓글 작성시 자동 입력 |
+| bid | varchar | not null | x | 게시글번호 |
+| cgroup | int | not null | x | parent-cid |
+| cref | int | not null | x | 대댓글 = 댓글+1 |
+| corder | int | not null | default = 1 | group내 순서 |
+| cdepth | int | not null | x | 댓글=1, 대댓글=2 |
+| replier | varchar | not null | x | 사용자 id |
+| content | varchar | not null | x | 사용자 입력값 |
+| date | datetime | not null | current_timestamp() | 자동 입력 |

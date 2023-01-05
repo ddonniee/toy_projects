@@ -10,4 +10,13 @@
 | 이름 | 기능 | 예시 |
 | -- | -- | -- |
 | title | 버튼명 | "작성하기" |
-| link | 버튼 클릭시 링크 이동 | /write |
+| url | 버튼 클릭시 링크 이동 | /write |
+
+- Header component props
+
+| 이름 | 기능 | 예시 |
+| -- | -- | -- |
+| isShown | 버튼보이기 | true |
+| title | 버튼명 | "로그인하기" |
+| url | 버튼 클릭시 링크 이동 | /write |
+| onReadUrl | paramId 읽기| setParamID |

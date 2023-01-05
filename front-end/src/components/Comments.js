@@ -5,9 +5,8 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { AppContext } from "../App";
 
-export default function Comments(props) {
+export default function Comments() {
 
-    const onComment =props.onReply;
     const params = useParams();
     const [paramId, setParamId] = useState(params.id);
     const [lists, setLists] = useState([])
